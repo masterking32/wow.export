@@ -580,6 +580,9 @@
 								<template v-if="config.modelsExportTextures">
 									<span class="header">Skins</span>
 									<listboxb :items="modelViewerSkins" :selection="modelViewerSkinsSelection" :single="true"></listboxb>
+									<div style="text-align: center; margin: 5px auto;">
+										<input type="button" class="spaced" style="margin: 5px;" value="Export All Skins" @click="click('export-allskins', $event)" :class="{ disabled: isBusy }"/>
+									</div>
 								</template>
 							</template>
 							<template v-if="modelViewerActiveType === 'wmo'">

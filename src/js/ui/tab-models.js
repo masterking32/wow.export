@@ -598,4 +598,51 @@ core.registerLoadFunc(async () => {
 
 		await exportFiles(userSelection, false);
 	});
+
+	// Track when the user clicks to export all skins btn.
+	core.events.on('click-export-allskins', async () => {
+		const userSelection = core.view.selectionModels;
+		if (userSelection.length === 0) {
+			core.setToast('info', 'You didn\'t select any files to export; you should do that first.');
+			return;
+		}
+
+		let SkinLists = core.view.modelViewerSkins;
+		if(SkinLists.length <= 1)
+		{
+			await exportFiles(userSelection, false);
+			return;
+		}
+
+		for (const skin of SkinLists) {
+			const display = activeSkins.get(skin.id);
+			selectedSkinName = skin.id;
+			let currGeosets = core.view.modelViewerGeosets;
+	
+			if (display.extraGeosets !== undefined) {
+				for (const geoset of currGeosets) {
+					if (geoset.id > 0 && geoset.id < 900)
+						geoset.checked = false;
+				}
+	
+				for (const extraGeoset of display.extraGeosets) {
+					for (const geoset of currGeosets) {
+						if (geoset.id === extraGeoset)
+							geoset.checked = true;
+					}
+				}
+			} else {
+				for (const geoset of currGeosets) {
+					const id = geoset.id.toString();
+					geoset.checked = (id.endsWith('0') || id.endsWith('01'));
+				}
+			}
+	
+			if (display.textures.length > 0)
+				selectedVariantTextureIDs = [...display.textures];
+	
+			await activeRenderer.applyReplaceableTextures(display);
+			await exportFiles(userSelection, false);
+		}
+	});
 });
