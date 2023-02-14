@@ -219,6 +219,14 @@
 						</label>
 					</div>
 					<div>
+						<h1>Export M2 create manifest file</h1>
+						<p>Create a manifest file when exporting an M2 file.</p>
+						<label class="ui-checkbox">
+							<input type="checkbox" v-model="configEdit.exportM2Manifest"/>
+							<span>Enable</span>
+						</label>
+					</div>
+					<div>
 						<h1>Always Overwrite Existing Files (Recommended)</h1>
 						<p>When exporting, files will always be written to disk even if they exist.</p>
 						<p>Disabling this can speed up exporting, but may lead to issues between versions.</p>

@@ -487,7 +487,9 @@ class M2Exporter {
 			manifest.addProperty('anims', animManifest);
 		}
 
-		await manifest.write();
+		if(config.exportM2Manifest) {
+			await manifest.write();
+		}
 	}
 }
 
