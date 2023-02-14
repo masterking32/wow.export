@@ -310,6 +310,7 @@ const exportFiles = async (files, isLocal = false, exportID = -1) => {
 		}
 	} else {
 		const casc = core.view.casc;
+		const exportM2BasedOnSkinName = core.view.config.exportM2BasedOnSkinName;
 		const helper = new ExportHelper(files.length, 'model');
 		helper.start();
 
@@ -362,7 +363,10 @@ const exportFiles = async (files, isLocal = false, exportID = -1) => {
 					throw new Error('Unknown model file type for %d', fileDataID);
 
 				let exportPath;
-				if (isLocal) {
+				
+				if(!exportM2BasedOnSkinName){
+					exportPath = isLocal ? fileName : ExportHelper.getExportPath(fileName);
+				} else if (isLocal) {
 					exportPath = fileName;
 				} else if (fileType === MODEL_TYPE_M2 && selectedSkinName !== null && fileName === activePath) {
 					const baseFileName = path.basename(fileName, path.extname(fileName));

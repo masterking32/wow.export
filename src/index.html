@@ -211,6 +211,14 @@
 						</label>
 					</div>
 					<div>
+						<h1>Export M2 files based on selected skin name</h1>
+						<p>M2 models exported with a skin will be named uniquely based on the selected skin.</p>
+						<label class="ui-checkbox">
+							<input type="checkbox" v-model="configEdit.exportM2BasedOnSkinName"/>
+							<span>Enable</span>
+						</label>
+					</div>
+					<div>
 						<h1>Always Overwrite Existing Files (Recommended)</h1>
 						<p>When exporting, files will always be written to disk even if they exist.</p>
 						<p>Disabling this can speed up exporting, but may lead to issues between versions.</p>
