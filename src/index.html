@@ -222,6 +222,22 @@
 						</label>
 					</div>
 					<div>
+						<h1>Export M2 files based on selected skin name</h1>
+						<p>M2 models exported with a skin will be named uniquely based on the selected skin.</p>
+						<label class="ui-checkbox">
+							<input type="checkbox" v-model="configEdit.exportM2BasedOnSkinName"/>
+							<span>Enable</span>
+						</label>
+					</div>
+					<div>
+						<h1>Export M2 create manifest file</h1>
+						<p>Create a manifest file when exporting an M2 file.</p>
+						<label class="ui-checkbox">
+							<input type="checkbox" v-model="configEdit.exportM2Manifest"/>
+							<span>Enable</span>
+						</label>
+					</div>
+					<div>
 						<h1>Always Overwrite Existing Files (Recommended)</h1>
 						<p>When exporting, files will always be written to disk even if they exist.</p>
 						<p>Disabling this can speed up exporting, but may lead to issues between versions.</p>
@@ -600,6 +616,9 @@
 								<template v-if="config.modelsExportTextures">
 									<span class="header">Skins</span>
 									<listboxb :items="modelViewerSkins" :selection="modelViewerSkinsSelection" :single="true"></listboxb>
+									<div style="text-align: center; margin: 5px auto;">
+										<input type="button" class="spaced" style="margin: 5px;" value="Export All Skins" @click="click('export-allskins', $event)" :class="{ disabled: isBusy }"/>
+									</div>
 								</template>
 								<!--<template v-if="config.exportModelFormat === 'GLTF'">
 									<span class="header">Animations</span>

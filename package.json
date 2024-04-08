@@ -2,10 +2,11 @@
 	"name": "wow.export",
 	"description": "Export Toolkit for World of Warcraft",
 	"license": "MIT",
-	"version": "0.1.60",
+	"version": "0.1.60.1",
 	"contributors": [
 		"Kruithne <kruithne@gmail.com> (https://kruithne.net/)",
-		"Marlamin <marlamin@marlamin.com> (https://marlamin.com/)"
+		"Marlamin <marlamin@marlamin.com> (https://marlamin.com/)",
+		"MasterkinG32 <lichwow_masterking@yahoo.com> (https://masterking32.com/)"
 	],
 	"repository": {
 		"type": "git",

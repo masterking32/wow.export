@@ -38,6 +38,8 @@
 	"exportModelFormat": "OBJ",
 	"overwriteFiles": true,
 	"exportM2Bones": false,
+	"exportM2BasedOnSkinName": true,
+	"exportM2Manifest": true,
 	"exportM2Meta": false,
 	"exportWMOMeta": false,
 	"exportBLPMeta": false,

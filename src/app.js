@@ -688,7 +688,7 @@ document.addEventListener('click', function(e) {
 	tactKeys.load();
 
 	// Check for updates.
-	if (BUILD_RELEASE) {
+	/*if (BUILD_RELEASE) {
 		core.view.isBusy++;
 		core.view.showLoadScreen('Checking for updates...');
 
@@ -706,7 +706,7 @@ document.addEventListener('click', function(e) {
 	} else {
 		// Debug mode, go straight to Blender add-on check.
 		blender.checkLocalVersion();
-	}
+	}*/
 
 	// Load the changelog when the user opens the screen.
 	core.events.on('screen-changelog', () => {

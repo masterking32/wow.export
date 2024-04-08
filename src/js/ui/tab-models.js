@@ -322,6 +322,7 @@ const exportFiles = async (files, isLocal = false, exportID = -1) => {
 		}
 	} else {
 		const casc = core.view.casc;
+		const exportM2BasedOnSkinName = core.view.config.exportM2BasedOnSkinName;
 		const helper = new ExportHelper(files.length, 'model');
 		helper.start();
 
@@ -374,7 +375,9 @@ const exportFiles = async (files, isLocal = false, exportID = -1) => {
 					throw new Error('Unknown model file type for %d', fileDataID);
 
 				let exportPath;
-				if (isLocal) {
+				if (!exportM2BasedOnSkinName) {
+					exportPath = isLocal ? fileName : ExportHelper.getExportPath(fileName);
+				} else if (isLocal) {
 					exportPath = fileName;
 				} else if (fileType === MODEL_TYPE_M2 && selectedSkinName !== null && fileName === activePath && format !== 'RAW') {
 					const baseFileName = path.basename(fileName, path.extname(fileName));
@@ -605,5 +608,74 @@ core.registerLoadFunc(async () => {
 		}
 
 		await exportFiles(userSelection, false);
+	});
+	
+	
+	// Track when the user clicks to export all skins btn.
+	core.events.on('click-export-allskins', async () => {
+		const userSelectionItems = core.view.selectionModels;
+		if (userSelectionItems.length === 0) {
+			core.setToast('info', 'You didn\'t select any files to export; you should do that first.');
+			return;
+		}
+		for (const ModelSelection of userSelectionItems) {
+			let userSelection = []
+			userSelection.push(ModelSelection); 
+			core.view.selectionModels = userSelection;
+			while (core.view.isBusy)
+				await new Promise(resolve => setTimeout(resolve, 100));
+
+			const first = listfile.stripFileEntry(ModelSelection);
+			if (!core.view.isBusy && first && activePath !== first)
+				await previewModel(first);
+
+			while (core.view.isBusy)
+				await new Promise(resolve => setTimeout(resolve, 100));
+
+			let SkinLists = core.view.modelViewerSkins;
+			if (SkinLists.length <= 1)
+			{
+				await exportFiles(userSelection, false);
+				while (core.view.isBusy) 
+					await new Promise(resolve => setTimeout(resolve, 100));
+				
+			} else {
+				for (const skin of SkinLists) {
+					const display = activeSkins.get(skin.id);
+					selectedSkinName = skin.id;
+					let currGeosets = core.view.modelViewerGeosets;
+			
+					if (display.extraGeosets !== undefined) {
+						for (const geoset of currGeosets) {
+							if (geoset.id > 0 && geoset.id < 900)
+								geoset.checked = false;
+						}
+			
+						for (const extraGeoset of display.extraGeosets) {
+							for (const geoset of currGeosets) {
+								if (geoset.id === extraGeoset)
+									geoset.checked = true;
+							}
+						}
+					} else {
+						for (const geoset of currGeosets) {
+							const id = geoset.id.toString();
+							geoset.checked = (id.endsWith('0') || id.endsWith('01'));
+						}
+					}
+			
+					if (display.textures.length > 0)
+						selectedVariantTextureIDs = [...display.textures];
+			
+					await activeRenderer.applyReplaceableTextures(display);
+					while (core.view.isBusy)
+						await new Promise(resolve => setTimeout(resolve, 100));
+
+					await exportFiles(userSelection, false);
+					while (core.view.isBusy)
+						await new Promise(resolve => setTimeout(resolve, 100));
+				}
+			}
+		}
 	});
 });
